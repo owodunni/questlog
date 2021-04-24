@@ -25,6 +25,14 @@ task preCommit(type: Exec) {
             "commit-msg"
 }
 
+task czCheck(type: Exec) {
+    commandLine "cz", "check", "--rev-range", "HEAD~..HEAD"
+}
+
 task initialize(){
     dependsOn pip, preCommit
+}
+
+task lint(){
+    dependsOn czCheck
 }
