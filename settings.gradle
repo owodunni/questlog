@@ -8,6 +8,5 @@
  */
 
 rootProject.name = 'questlog'
-include('frontend')
+include('app')
 include('backend')
-include('plugin')
