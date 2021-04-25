@@ -29,6 +29,9 @@ spotless {
 	}
 }
 
+spotlessCheck.dependsOn("app:styleCheck")
+spotlessApply.dependsOn("app:styleFix")
+
 
 task venv(type: Exec) {
 	commandLine "python3", "-m", "venv", ".venv"
