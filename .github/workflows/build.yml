@@ -21,3 +21,5 @@ jobs:
         run: ./gradlew initialize
       - name: commitizen
         run: cz check -m "${{ github.event.commits[0].message }}"
+      - name: spotless
+        run: ./gradlew spotlessCheck
