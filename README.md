@@ -41,3 +41,15 @@ commit style. To commit run:
 ```
 cz c
 ```
+
+### Formatting
+
+We try to be strict with formatting, believing that clean code starts with a
+uniform code base. To help we have two commands:
+
+```
+./gradlew spotlessCheck
+./gradlew spotlessApply
+```
+
+The first command lints and the second command fixes.
