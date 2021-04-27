@@ -1,0 +1,30 @@
+def apiBuilder = {name ->
+  def path = file("build/api/$name")
+  if(!path.exists())
+    path.mkdirs()
+  [
+    "apibuilder",
+    "code",
+    "poole-solutions",
+    "questlog-api",
+    "latest",
+    name,
+    path
+  ]
+}
+
+task assembleLambdaNode(type: Exec) {
+  commandLine apiBuilder("lambda-node")
+}
+
+task assembleOpenAPI(type: Exec) {
+  commandLine apiBuilder("openapi")
+}
+
+task assembleGraphQL(type: Exec) {
+  commandLine apiBuilder("graphql")
+}
+
+task assembleAPI(){
+  dependsOn assembleOpenAPI, assembleGraphQL, assembleLambdaNode
+}

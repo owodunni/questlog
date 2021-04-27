@@ -8,5 +8,6 @@
  */
 
 rootProject.name = 'questlog'
+include('api')
 include('app')
 include('backend')
