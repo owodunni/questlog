@@ -1,32 +1,30 @@
 plugins {
-	id "com.diffplug.spotless" version "5.12.4"
+  id "com.diffplug.spotless" version "5.12.4"
 }
 
 repositories {
-	// Use Maven Central for resolving dependencies.
-	// You can declare any Maven/Ivy/file repository here.
-	mavenCentral()
+  mavenCentral()
 }
 
 spotless {
-	ratchetFrom 'origin/main'
+  ratchetFrom 'origin/main'
 
-	format 'misc', {
-		target fileTree(dir: projectDir, includes: [
-			'**/*.md',
-			'**/.gitignore',
-			'**/*.txt'
-		])
+  format 'misc', {
+    target fileTree(dir: projectDir, includes: [
+      '**/*.md',
+      '**/.gitignore',
+      '**/*.txt'
+    ])
 
-		trimTrailingWhitespace()
-		indentWithSpaces()
-		endWithNewline()
-	}
-	groovyGradle {
-		importOrder()
-		target fileTree(dir: projectDir, include: '**/*.gradle')
-		greclipse()
-	}
+    trimTrailingWhitespace()
+    indentWithSpaces()
+    endWithNewline()
+  }
+  groovyGradle {
+    importOrder()
+    target fileTree(dir: projectDir, include: '**/*.gradle')
+    greclipse().configFile('.groovy.eclipseformat.prefs')
+  }
 }
 
 spotlessCheck.dependsOn("app:styleCheck")
@@ -34,41 +32,41 @@ spotlessApply.dependsOn("app:styleFix")
 
 
 task venv(type: Exec) {
-	commandLine "python3", "-m", "venv", ".venv"
+  commandLine "python3", "-m", "venv", ".venv"
 }
 
 task pip(type: Exec) {
-	workingDir projectDir
-	def reqs = [
-		file("project-requirements.txt"),
-	]
+  workingDir projectDir
+  def reqs = [
+    file("project-requirements.txt"),
+  ]
 
-	inputs.files reqs
+  inputs.files reqs
 
-	def args = ["pip", "install"]
+  def args = ["pip", "install"]
 
-	reqs.each { req ->
-		args += ["-r", req]
-	}
-	commandLine args
+  reqs.each { req ->
+    args += ["-r", req]
+  }
+  commandLine args
 }
 
 task preCommit(type: Exec) {
-	dependsOn pip
-	commandLine "pre-commit",
-			"install",
-			"--hook-type",
-			"commit-msg"
+  dependsOn pip
+  commandLine "pre-commit",
+      "install",
+      "--hook-type",
+      "commit-msg"
 }
 
 task czCheck(type: Exec) {
-	commandLine "cz", "check", "--rev-range", "HEAD~..HEAD"
+  commandLine "cz", "check", "--rev-range", "HEAD~..HEAD"
 }
 
 task initialize(){
-	dependsOn pip, preCommit
+  dependsOn pip, preCommit
 }
 
 task lint(){
-	dependsOn czCheck
+  dependsOn czCheck
 }
