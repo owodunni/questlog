@@ -1,26 +1,12 @@
-import java.util.zip.DataFormatException
-
-def flutterFormat = ["flutter", "format"]
 def dartFiles = fileTree(dir: projectDir, include: '**/*.dart')
 
 task styleCheck(type: Exec){
-    inputs.files dartFiles
-    def flutterFormatterOut = new ByteArrayOutputStream()
-
-    standardOutput = flutterFormatterOut
-
-    commandLine flutterFormat + "-n" + projectDir
-
-    doLast{
-        if(!flutterFormatterOut.toString().isEmpty()){
-            throw new DataFormatException("Dart files need formatting:\n${flutterFormatterOut.toString()}")
-        }
-    }
+	inputs.files dartFiles
+	commandLine "flutter", "format", "-n", "--set-exit-if-changed", projectDir
 }
 
 task styleFix(type: Exec) {
-    inputs.files dartFiles
-    outputs.files dartFiles
-    commandLine flutterFormat + projectDir
+	inputs.files dartFiles
+	outputs.files dartFiles
+	commandLine "flutter", "format", projectDir
 }
-
