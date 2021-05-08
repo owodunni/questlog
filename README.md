@@ -1,4 +1,6 @@
 # QuestLog
+![build workflow](https://github.com/owodunni/questlog/actions/workflows/build.yml/badge.svg)
+
 When your party embarks on a quest it is best to keep a log of what to bring.
 
 
@@ -41,3 +43,15 @@ commit style. To commit run:
 ```
 cz c
 ```
+
+### Formatting
+
+We try to be strict with formatting, believing that clean code starts with a
+uniform code base. To help we have two commands:
+
+```
+./gradlew spotlessCheck
+./gradlew spotlessApply
+```
+
+The first command lints and the second command fixes.

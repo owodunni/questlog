@@ -1,0 +1,60 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+  id "org.openapi.generator" version "5.1.0"
+}
+
+def apiSpec = "$projectDir/openapi.yaml"
+def packageName = "io.questlog"
+
+def generators = [
+  "python-flask",
+  "dart",
+  "html2"
+]
+
+task assemble{
+  group "build"
+  description "Assembles all variants of the Questlog API"
+}
+
+generators.forEach { generator ->
+  def name = generator.capitalize().replace("-","")
+
+  def generatorTask = tasks.create(name: "generate${name}", type: GenerateTask) {
+    generatorName = generator
+    inputSpec = apiSpec
+    outputDir = "$buildDir/openApi/$name"
+    validateSpec = true
+    apiPackage = "${packageName}.api"
+    invokerPackage = "${packageName}.invoker"
+    modelPackage = "${packageName}.model"
+  }
+  assemble.dependsOn generatorTask
+}
+
+task buildPythonServer(type: GenerateTask){
+  generatorName = "python-flask"
+}
+
+openApiValidate {
+  inputSpec = apiSpec
+  recommend = true
+}
+
+class KonsoleTask extends DefaultTask {
+  @Input
+  String command
+
+  @TaskAction
+  void launchKonsole() {
+    ext.process = new ProcessBuilder()
+        .directory(project.projectDir)
+        .command('konsole', '--noclose', '-e', command)
+        .start()
+  }
+}
+
+task develop(type: KonsoleTask) {
+  command = "docker run -p 8080:8080 -v $projectDir:/tmp -e SWAGGER_FILE=$apiSpec swaggerapi/swagger-editor"
+}
