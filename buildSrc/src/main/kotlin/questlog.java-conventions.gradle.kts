@@ -1,4 +1,4 @@
-group = "io.questLog"
+group = "io.${rootProject.name}"
 
 repositories {
     jcenter()

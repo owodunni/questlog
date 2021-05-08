@@ -7,15 +7,16 @@ version "0.1.0"
 def depsDir = "$buildDir/extractedDpendencies"
 
 configurations {
-  implementation
+  api
 }
 
 dependencies {
-  implementation project(path: ":api")
+  api project(path: ":api")
 }
 
 task extractDependencies(type: Copy) {
-  configurations.implementation.asFileTree.each {
+  dependsOn configurations.api
+  configurations.api.asFileTree.each {
     from(tarTree(it))
   }
   into depsDir
