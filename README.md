@@ -55,3 +55,13 @@ uniform code base. To help we have two commands:
 ```
 
 The first command lints and the second command fixes.
+
+## Develop
+
+To build QuestLog simply run:
+
+```
+./gradlew assemble
+```
+
+This will assemble all projects and lint them.

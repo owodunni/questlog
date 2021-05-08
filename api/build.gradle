@@ -13,9 +13,15 @@ def generators = [
   "html2"
 ]
 
+openApiValidate {
+  inputSpec = apiSpec
+  recommend = true
+}
+
 task assemble{
   group "build"
   description "Assembles all variants of the Questlog API"
+  dependsOn "openApiValidate"
 }
 
 generators.forEach { generator ->
@@ -35,11 +41,6 @@ generators.forEach { generator ->
 
 task buildPythonServer(type: GenerateTask){
   generatorName = "python-flask"
-}
-
-openApiValidate {
-  inputSpec = apiSpec
-  recommend = true
 }
 
 class KonsoleTask extends DefaultTask {
