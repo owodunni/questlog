@@ -1,9 +1,6 @@
 plugins {
+  id "questlog.java-conventions"
   id "com.diffplug.spotless" version "5.12.4"
-}
-
-repositories {
-  mavenCentral()
 }
 
 spotless {
@@ -23,6 +20,14 @@ spotless {
   groovyGradle {
     target fileTree(dir: projectDir, include: '**/*.gradle')
     greclipse().configFile('.groovy.eclipseformat.prefs')
+  }
+  kotlin {
+    target fileTree(dir: projectDir, include: '**/*.kt')
+    ktlint()
+  }
+  kotlinGradle {
+    target fileTree(dir: projectDir, include: '**/*.gradle.kts')
+    ktlint()
   }
 }
 

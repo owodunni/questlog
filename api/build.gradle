@@ -1,11 +1,15 @@
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
+  id "questlog.java-conventions"
   id "org.openapi.generator" version "5.1.0"
 }
 
+version "0.1.0"
+
 def apiSpec = "$projectDir/openapi.yaml"
 def packageName = "io.questlog"
+def artifactDir = "$buildDir/api"
 
 def generators = [
   "python-flask",
@@ -18,11 +22,7 @@ openApiValidate {
   recommend = true
 }
 
-task assemble{
-  group "build"
-  description "Assembles all variants of the Questlog API"
-  dependsOn "openApiValidate"
-}
+assemble.dependsOn  "openApiValidate"
 
 generators.forEach { generator ->
   def name = generator.capitalize().replace("-","")
@@ -30,7 +30,7 @@ generators.forEach { generator ->
   def generatorTask = tasks.create(name: "generate${name}", type: GenerateTask) {
     generatorName = generator
     inputSpec = apiSpec
-    outputDir = "$buildDir/openApi/$name"
+    outputDir = "$artifactDir/$name"
     validateSpec = true
     apiPackage = "${packageName}.api"
     invokerPackage = "${packageName}.invoker"
