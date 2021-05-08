@@ -25,9 +25,6 @@ task generatePythonFlask(type: GenerateTask) {
   inputSpec = apiSpec
   outputDir = "$artifactDir/$name"
   validateSpec = true
-  apiPackage = packageName
-  invokerPackage = "${packageName}.invoker"
-  modelPackage = "${packageName}.model"
 }
 
 distTar.dependsOn generatePythonFlask
@@ -50,7 +47,7 @@ dockerRun {
   name 'openapi'
   image 'swaggerapi/swagger-editor'
   volumes "$projectDir": '/tmp'
-  ports '8080:8080'
+  ports '8070:8080'
   daemonize true
-  env 'SWAGGER_FILE': "$apiName"
+  env 'SWAGGER_FILE':"/tmp/$apiName"
 }
