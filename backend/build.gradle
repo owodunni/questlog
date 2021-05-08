@@ -5,6 +5,7 @@ plugins {
 version "0.1.0"
 
 def depsDir = "$buildDir/extractedDpendencies"
+def generatedDir = "$projectDir/src/generated"
 
 configurations {
   api
@@ -22,8 +23,24 @@ task extractDependencies(type: Copy) {
   into depsDir
 }
 
-task assembleBackend(){
+task extractModels(type: Copy) {
   dependsOn extractDependencies
+  fileTree(dir: depsDir, include: "**/models/*").each {
+    from it
+  }
+  into "$generatedDir/models"
+}
+
+task extractApi(type: Copy) {
+  dependsOn extractDependencies
+  fileTree(dir: depsDir, include: "**/openapi.yaml" ).each {
+    from it
+  }
+  into "$generatedDir/api"
+}
+
+task assembleBackend(){
+  dependsOn extractApi, extractModels
 }
 
 task assemble{
