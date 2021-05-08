@@ -39,6 +39,6 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Initialize
-        run: ./gradlew initialize
+        run: ./gradlew --build-cache initialize
       - name: Assemble
-        run: ./gradlew assemble
+        run: ./gradlew --build-cache assemble
