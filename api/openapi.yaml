@@ -23,7 +23,7 @@ paths:
       tags:
         - adventure
       summary: Add a new adventure
-      operationId: post--adventure
+      operationId: post_adventure
       requestBody:
         description: Adventure object that needs to be added. Posting an empty adventure will generate a default adventure.
         content:
@@ -47,7 +47,7 @@ paths:
       tags:
         - adventure
       summary: Get all adventures
-      operationId: get--adventure
+      operationId: get_adventure
       responses:
         200:
           description: Successful Operation
@@ -58,14 +58,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/adventure'
 
-  '/adventure/{adventureId}':
+  '/adventure/{adventure_id}':
     get:
       tags:
         - adventure
       summary: Find adventure by Id
-      operationId: get--adventure-guid
+      operationId: get_adventure_guid
       parameters:
-        - name: adventureId
+        - name: adventure_id
           description: Id of adventure to return
           in: path
           required: true
