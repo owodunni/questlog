@@ -40,9 +40,5 @@ jobs:
 
       - name: Initialize
         run: ./gradlew initialize
-      - name: commitizen
-        run: cz check -m "${{ github.event.commits[0].message }}"
-      - name: spotless
-        run: ./gradlew spotlessCheck
       - name: Assemble
         run: ./gradlew assemble
