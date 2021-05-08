@@ -13,7 +13,7 @@ def generators = [
   "html2"
 ]
 
-task assembleApi{
+task assemble{
   group "build"
   description "Assembles all variants of the Questlog API"
 }
@@ -30,7 +30,7 @@ generators.forEach { generator ->
     invokerPackage = "${packageName}.invoker"
     modelPackage = "${packageName}.model"
   }
-  assembleApi.dependsOn generatorTask
+  assemble.dependsOn generatorTask
 }
 
 task buildPythonServer(type: GenerateTask){
