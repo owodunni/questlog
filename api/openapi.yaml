@@ -1,0 +1,165 @@
+openapi: 3.0.2
+info:
+  contact:
+    name: Alexander Poole
+    url: 'https://github.com/owodunni/'
+    email: alexander@poole.solutions
+  title: QuestLog Api
+  description: Adventure planing tool.
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
+  version: 0.1.0
+servers:
+  - url: 'https://api.questlog.io/v0'
+
+tags:
+- name: adventure
+  description: Represents an adventure.
+  
+paths:
+  /adventure:
+    post:
+      tags:
+        - adventure
+      summary: Add a new adventure
+      operationId: post--adventure
+      requestBody:
+        description: Adventure object that needs to be added. Posting an empty adventure will generate a default adventure.
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/adventure'
+        required: true
+      responses:
+        200:
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adventure'
+        405:
+          description: Invalid input
+        409:
+          description: Adventure with id already exists
+      x-codegen-request-body-name: body
+    get:
+      tags:
+        - adventure
+      summary: Get all adventures
+      operationId: get--adventure
+      responses:
+        200:
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/adventure'
+
+  '/adventure/{adventureId}':
+    get:
+      tags:
+        - adventure
+      summary: Find adventure by Id
+      operationId: get--adventure-guid
+      parameters:
+        - name: adventureId
+          description: Id of adventure to return
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adventure'
+        400:
+          description: Invalid adventure id
+        404:
+          description: Adventure not found
+
+
+components:
+  schemas:
+    adventure:
+      description: Represents an adventure
+      properties:
+        guid:
+          type: string
+          format: uuid
+        name:
+          description: Name of adventure
+          type: string
+        description:
+          description: Description of adventure
+          type: string
+        location:
+          type: string
+        duration:
+          description: Adventure duration
+          items:
+            $ref: '#/components/schemas/duration'
+        participants:
+          description: Adventure participants
+          items:
+            $ref: '#/components/schemas/participant'
+          type: array
+        packlist:
+          description: List of items that the adventure partisipants must bring
+          items:
+            $ref: '#/components/schemas/item'
+          type: array
+      type: object
+    item:
+      description: Represents an adventure item
+      properties:
+        name:
+          type: string
+        size:
+          type: number
+          format: double
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/item_type'
+      type: object
+    participant:
+      description: Represents a adventure participant and what items they will bring.
+      properties:
+        person:
+          $ref: '#/components/schemas/person'
+        items:
+          items:
+            $ref: '#/components/schemas/item'
+          type: array
+      type: object
+    person:
+      properties:
+        guid:
+          type: string
+          format: uuid
+        name:
+          type: string
+      type: object
+    duration:
+      properties:
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+    item_type:
+      enum:
+        - Food
+        - Clothes
+        - Camp
+        - Utensils
+        - Gear
+      type: string

@@ -21,7 +21,6 @@ spotless {
     endWithNewline()
   }
   groovyGradle {
-    importOrder()
     target fileTree(dir: projectDir, include: '**/*.gradle')
     greclipse().configFile('.groovy.eclipseformat.prefs')
   }
