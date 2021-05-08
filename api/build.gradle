@@ -4,11 +4,13 @@ plugins {
   id "questlog.java-conventions"
   id "distribution"
   id "org.openapi.generator" version "5.1.0"
+  id 'com.palantir.docker-run' version "0.26.0"
 }
 
 version "0.1.0"
 
-def apiSpec = "$projectDir/openapi.yaml"
+def apiName = "openapi.yaml"
+def apiSpec = "$projectDir/$apiName"
 def packageName = "io.questlog"
 def artifactDir = "$buildDir/api"
 
@@ -44,19 +46,11 @@ artifacts {
   "default" distTar
 }
 
-class KonsoleTask extends DefaultTask {
-  @Input
-  String command
-
-  @TaskAction
-  void launchKonsole() {
-    ext.process = new ProcessBuilder()
-        .directory(project.projectDir)
-        .command('konsole', '--noclose', '-e', command)
-        .start()
-  }
-}
-
-task develop(type: KonsoleTask) {
-  command = "docker run -p 8080:8080 -v $projectDir:/tmp -e SWAGGER_FILE=$apiSpec swaggerapi/swagger-editor"
+dockerRun {
+  name 'openapi'
+  image 'swaggerapi/swagger-editor'
+  volumes "$projectDir": '/tmp'
+  ports '8080:8080'
+  daemonize true
+  env 'SWAGGER_FILE': "$apiName"
 }
