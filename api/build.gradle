@@ -21,10 +21,6 @@ task assembleOpenAPI(type: Exec) {
   commandLine apiBuilder("openapi")
 }
 
-task assembleGraphQL(type: Exec) {
-  commandLine apiBuilder("graphql")
-}
-
 task assembleAPI(){
-  dependsOn assembleOpenAPI, assembleGraphQL, assembleLambdaNode
+  dependsOn assembleOpenAPI, assembleLambdaNode
 }
