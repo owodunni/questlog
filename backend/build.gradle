@@ -26,5 +26,7 @@ task assembleBackend(){
 }
 
 task assemble{
+  group "build"
+  description "Assemble backend"
   dependsOn assembleBackend
 }
