@@ -2,6 +2,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
   id "questlog.java-conventions"
+  id "distribution"
   id "org.openapi.generator" version "5.1.0"
 }
 
@@ -11,36 +12,32 @@ def apiSpec = "$projectDir/openapi.yaml"
 def packageName = "io.questlog"
 def artifactDir = "$buildDir/api"
 
-def generators = [
-  "python-flask",
-  "dart",
-  "html2"
-]
-
 openApiValidate {
   inputSpec = apiSpec
   recommend = true
 }
 
-assemble.dependsOn  "openApiValidate"
-
-generators.forEach { generator ->
-  def name = generator.capitalize().replace("-","")
-
-  def generatorTask = tasks.create(name: "generate${name}", type: GenerateTask) {
-    generatorName = generator
-    inputSpec = apiSpec
-    outputDir = "$artifactDir/$name"
-    validateSpec = true
-    apiPackage = "${packageName}.api"
-    invokerPackage = "${packageName}.invoker"
-    modelPackage = "${packageName}.model"
-  }
-  assemble.dependsOn generatorTask
+task generatePythonFlask(type: GenerateTask) {
+  dependsOn "openApiValidate"
+  generatorName = "python-flask"
+  inputSpec = apiSpec
+  outputDir = "$artifactDir/$name"
+  validateSpec = true
+  apiPackage = "${packageName}.api"
+  invokerPackage = "${packageName}.invoker"
+  modelPackage = "${packageName}.model"
 }
 
-task buildPythonServer(type: GenerateTask){
-  generatorName = "python-flask"
+distTar.dependsOn generatePythonFlask
+distZip.dependsOn generatePythonFlask
+
+distributions {
+  main {
+    distributionBaseName = "${project.group}.${project.name}"
+    contents {
+      from file(generatePythonFlask.outputDir)
+    }
+  }
 }
 
 class KonsoleTask extends DefaultTask {

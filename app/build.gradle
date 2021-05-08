@@ -4,9 +4,9 @@ plugins {
 
 version "0.1.0"
 
-dependencies {
-  implementation(project(":api"))
-}
+/*dependencies {
+ implementation projects.api
+ }*/
 
 def dartFiles = fileTree(dir: projectDir, include: '**/*.dart')
 

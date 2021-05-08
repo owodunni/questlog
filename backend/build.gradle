@@ -4,12 +4,21 @@ plugins {
 
 version "0.1.0"
 
+configurations {
+  implementation {
+    canBeConsumed = false
+    canBeResolved = true
+  }
+}
+
 dependencies {
-  implementation(project(":api"))
+  implementation(project(path: ":api", configuration: 'generatedApi'))
 }
 
 task assembleBackend(){
   //dependsOn copyGeneratedApi
 }
 
-assemble.dependsOn assembleBackend
+task assemble{
+  dependsOn assembleBackend
+}
