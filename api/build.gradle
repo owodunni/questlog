@@ -40,6 +40,10 @@ distributions {
   }
 }
 
+artifacts {
+  "default" distTar
+}
+
 class KonsoleTask extends DefaultTask {
   @Input
   String command

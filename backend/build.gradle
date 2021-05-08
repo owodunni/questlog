@@ -4,19 +4,25 @@ plugins {
 
 version "0.1.0"
 
+def depsDir = "$buildDir/extractedDpendencies"
+
 configurations {
-  implementation {
-    canBeConsumed = false
-    canBeResolved = true
-  }
+  implementation
 }
 
 dependencies {
-  implementation(project(path: ":api", configuration: 'generatedApi'))
+  implementation project(path: ":api")
+}
+
+task extractDependencies(type: Copy) {
+  configurations.implementation.asFileTree.each {
+    from(tarTree(it))
+  }
+  into depsDir
 }
 
 task assembleBackend(){
-  //dependsOn copyGeneratedApi
+  dependsOn extractDependencies
 }
 
 task assemble{
