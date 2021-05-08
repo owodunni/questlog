@@ -11,7 +11,7 @@ version "0.1.0"
 
 def apiName = "openapi.yaml"
 def apiSpec = "$projectDir/$apiName"
-def packageName = "io.questlog"
+def packageName = "${project.group}.${project.name}"
 def artifactDir = "$buildDir/api"
 
 openApiValidate {
@@ -25,7 +25,7 @@ task generatePythonFlask(type: GenerateTask) {
   inputSpec = apiSpec
   outputDir = "$artifactDir/$name"
   validateSpec = true
-  apiPackage = "${packageName}.api"
+  apiPackage = packageName
   invokerPackage = "${packageName}.invoker"
   modelPackage = "${packageName}.model"
 }
@@ -35,7 +35,7 @@ distZip.dependsOn generatePythonFlask
 
 distributions {
   main {
-    distributionBaseName = "${project.group}.${project.name}"
+    distributionBaseName = packageName
     contents {
       from file(generatePythonFlask.outputDir)
     }
