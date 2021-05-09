@@ -5,7 +5,7 @@ plugins {
 version "0.1.0"
 
 def depsDir = "$buildDir/extractedDpendencies"
-def generatedDir = "$projectDir/src/generated"
+def generatedDir = "$projectDir/questlog/generated"
 
 configurations {
   api

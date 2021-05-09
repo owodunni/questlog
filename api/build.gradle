@@ -9,9 +9,9 @@ plugins {
 
 version "0.1.0"
 
-def apiName = "openapi.yaml"
-def apiSpec = "$projectDir/$apiName"
-def packageName = "${project.group}.${project.name}"
+def apiFile = "openapi.yaml"
+def apiSpec = "$projectDir/$apiFile"
+def apiName = "${project.group}.${project.name}"
 def artifactDir = "$buildDir/api"
 
 openApiValidate {
@@ -23,8 +23,8 @@ task generatePythonFlask(type: GenerateTask) {
   dependsOn "openApiValidate"
   generatorName = "python-flask"
   inputSpec = apiSpec
+  packageName = "questlog"
   outputDir = "$artifactDir/$name"
-  validateSpec = true
 }
 
 distTar.dependsOn generatePythonFlask
@@ -32,7 +32,7 @@ distZip.dependsOn generatePythonFlask
 
 distributions {
   main {
-    distributionBaseName = packageName
+    distributionBaseName = apiName
     contents {
       from file(generatePythonFlask.outputDir)
     }
@@ -49,5 +49,5 @@ dockerRun {
   volumes "$projectDir": '/tmp'
   ports '8070:8080'
   daemonize true
-  env 'SWAGGER_FILE':"/tmp/$apiName"
+  env 'SWAGGER_FILE':"/tmp/$apiFile"
 }
