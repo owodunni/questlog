@@ -17,25 +17,23 @@ dependencies {
 
 task extractDependencies(type: Copy) {
   dependsOn configurations.api
-  configurations.api.asFileTree.each {
-    from(tarTree(it))
+  from {
+    configurations.api.collect {
+      tarTree(it)
+    }
   }
   into depsDir
 }
 
 task extractModels(type: Copy) {
   dependsOn extractDependencies
-  fileTree(dir: depsDir, include: "**/models/*").each {
-    from it
-  }
-  into "$generatedDir/models"
+  from "$depsDir/io.questlog.api-0.1.0/questlog/generated"
+  into "$generatedDir"
 }
 
 task extractApi(type: Copy) {
   dependsOn extractDependencies
-  fileTree(dir: depsDir, include: "**/openapi.yaml" ).each {
-    from it
-  }
+  from "$depsDir/io.questlog.api-0.1.0/questlog/openapi"
   into "$generatedDir/api"
 }
 

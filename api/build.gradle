@@ -24,6 +24,7 @@ task generatePythonFlask(type: GenerateTask) {
   generatorName = "python-flask"
   inputSpec = apiSpec
   packageName = "questlog"
+  modelPackage = "generated.models"
   outputDir = "$artifactDir/$name"
 }
 
