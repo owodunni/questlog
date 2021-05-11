@@ -1,5 +1,7 @@
 # QuestLog
 ![build workflow](https://github.com/owodunni/questlog/actions/workflows/build.yml/badge.svg)
+[![codecov](https://codecov.io/gh/owodunni/questlog/branch/main/graph/badge.svg?token=BS9JKHF65X)](https://codecov.io/gh/owodunni/questlog)
+[![CodeFactor](https://www.codefactor.io/repository/github/owodunni/questlog/badge?s=d329caeaaf26b5eb59b20e109715684ba7476416)](https://www.codefactor.io/repository/github/owodunni/questlog)
 
 When your party embarks on a quest it is best to keep a log of what to bring.
 
