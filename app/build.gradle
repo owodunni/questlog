@@ -1,12 +1,18 @@
+plugins {
+  id "questlog.java-conventions"
+}
+
+version "0.1.0"
+
 def dartFiles = fileTree(dir: projectDir, include: '**/*.dart')
 
 task styleCheck(type: Exec){
-	inputs.files dartFiles
-	commandLine "flutter", "format", "-n", "--set-exit-if-changed", projectDir
+  inputs.files dartFiles
+  commandLine "flutter", "format", "-n", "--set-exit-if-changed", projectDir
 }
 
 task styleFix(type: Exec) {
-	inputs.files dartFiles
-	outputs.files dartFiles
-	commandLine "flutter", "format", projectDir
+  inputs.files dartFiles
+  outputs.files dartFiles
+  commandLine "flutter", "format", projectDir
 }

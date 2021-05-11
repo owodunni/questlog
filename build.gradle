@@ -1,9 +1,6 @@
 plugins {
+  id "questlog.java-conventions"
   id "com.diffplug.spotless" version "5.12.4"
-}
-
-repositories {
-  mavenCentral()
 }
 
 spotless {
@@ -24,6 +21,18 @@ spotless {
     target fileTree(dir: projectDir, include: '**/*.gradle')
     greclipse().configFile('.groovy.eclipseformat.prefs')
   }
+  kotlin {
+    target fileTree(dir: projectDir, include: '**/*.kt')
+    ktlint()
+  }
+  kotlinGradle {
+    target fileTree(dir: projectDir, include: '**/*.gradle.kts')
+    ktlint()
+  }
+  python {
+    target fileTree(dir: projectDir, include: '**/*.py')
+    black("20.8b1")
+  }
 }
 
 spotlessCheck.dependsOn("app:styleCheck")
@@ -34,20 +43,9 @@ task venv(type: Exec) {
   commandLine "python3", "-m", "venv", ".venv"
 }
 
-task pip(type: Exec) {
+task pip(type: PipTask) {
   workingDir projectDir
-  def reqs = [
-    file("project-requirements.txt"),
-  ]
-
-  inputs.files reqs
-
-  def args = ["pip", "install"]
-
-  reqs.each { req ->
-    args += ["-r", req]
-  }
-  commandLine args
+  setPipFiles(["project-requirements.txt"])
 }
 
 task preCommit(type: Exec) {

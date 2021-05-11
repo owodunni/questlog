@@ -39,6 +39,16 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Initialize
-        run: ./gradlew initialize
+        run: ./gradlew --build-cache initialize
       - name: Assemble
-        run: ./gradlew assemble
+        run: ./gradlew --build-cache build
+      - name: Publish Test Report
+        if: always()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: backend/build/outputs/tests/cov/coverage.xml

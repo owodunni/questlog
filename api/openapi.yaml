@@ -11,45 +11,45 @@ info:
     url: 'http://opensource.org/licenses/MIT'
   version: 0.1.0
 servers:
-  - url: 'https://api.questlog.io/v0'
-
+  - url: 'http://localhost:8080'
 tags:
-- name: adventure
-  description: Represents an adventure.
-  
+  - name: adventure
+    description: Represents an adventure.
 paths:
   /adventure:
     post:
       tags:
         - adventure
       summary: Add a new adventure
-      operationId: post--adventure
+      operationId: post_adventure
       requestBody:
-        description: Adventure object that needs to be added. Posting an empty adventure will generate a default adventure.
+        description: >-
+          Adventure object that needs to be added. Posting an empty adventure
+          will generate a default adventure.
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/adventure'
+              $ref: '#/components/schemas/adventure'
         required: true
       responses:
-        200:
+        '200':
           description: Successful Operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/adventure'
-        405:
+        '405':
           description: Invalid input
-        409:
+        '409':
           description: Adventure with id already exists
       x-codegen-request-body-name: body
     get:
       tags:
         - adventure
       summary: Get all adventures
-      operationId: get--adventure
+      operationId: get_adventure
       responses:
-        200:
+        '200':
           description: Successful Operation
           content:
             application/json:
@@ -57,15 +57,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/adventure'
-
-  '/adventure/{adventureId}':
+  '/adventure/{adventure_id}':
     get:
       tags:
         - adventure
       summary: Find adventure by Id
-      operationId: get--adventure-guid
+      operationId: get_adventure_guid
       parameters:
-        - name: adventureId
+        - name: adventure_id
           description: Id of adventure to return
           in: path
           required: true
@@ -73,18 +72,24 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        '200':
           description: Successful Operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/adventure'
-        400:
+        '400':
           description: Invalid adventure id
-        404:
+        '404':
           description: Adventure not found
-
-
+  /healthcheck:
+    get:
+      summary: Server healtcheck
+      description: Check if the server is operational
+      operationId: get_healthcheck
+      responses:
+        '200':
+          description: All is good
 components:
   schemas:
     adventure:
