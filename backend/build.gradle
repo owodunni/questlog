@@ -5,7 +5,9 @@ plugins {
 version "0.1.0"
 
 def depsDir = "$buildDir/extractedDpendencies"
-def generatedDir = "$projectDir/questlog/generated"
+def testResultDir = "$buildDir/outputs/tests"
+def srcDir = "$projectDir/questlog"
+def generatedDir = "$srcDir/generated"
 
 configurations {
   api
@@ -52,6 +54,17 @@ task extractApi(type: Copy) {
 
 task assembleBackend(){
   dependsOn extractApi, extractModels
+}
+
+task build(type: Exec) {
+  dependsOn assembleBackend
+  workingDir projectDir
+
+  commandLine "pytest", "-v", "--pyargs", "$srcDir/test",
+      "--cov-report", "html:$testResultDir/cov/html",
+      "--cov-report", "xml:$testResultDir/cov/coverage.xml",
+      "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
+      "--cov=$srcDir"
 }
 
 task assemble{

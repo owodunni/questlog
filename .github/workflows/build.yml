@@ -41,4 +41,4 @@ jobs:
       - name: Initialize
         run: ./gradlew --build-cache initialize
       - name: Assemble
-        run: ./gradlew --build-cache assemble
+        run: ./gradlew --build-cache build

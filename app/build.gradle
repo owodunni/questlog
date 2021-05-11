@@ -4,10 +4,6 @@ plugins {
 
 version "0.1.0"
 
-/*dependencies {
- implementation projects.api
- }*/
-
 def dartFiles = fileTree(dir: projectDir, include: '**/*.dart')
 
 task styleCheck(type: Exec){
