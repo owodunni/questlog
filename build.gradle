@@ -43,20 +43,9 @@ task venv(type: Exec) {
   commandLine "python3", "-m", "venv", ".venv"
 }
 
-task pip(type: Exec) {
+task pip(type: PipTask) {
   workingDir projectDir
-  def reqs = [
-    file("project-requirements.txt"),
-  ]
-
-  inputs.files reqs
-
-  def args = ["pip", "install"]
-
-  reqs.each { req ->
-    args += ["-r", req]
-  }
-  commandLine args
+  setPipFiles(["project-requirements.txt"])
 }
 
 task preCommit(type: Exec) {
