@@ -1,8 +1,11 @@
 import pytest
 import requests
 import os
+import json
 
-from requests.exceptions import ConnectionError
+import requests.exceptions as ex
+from questlog.generated.models.adventure import Adventure
+from questlog.encoder import JSONEncoder
 
 
 def is_responsive(url):
@@ -10,7 +13,7 @@ def is_responsive(url):
         response = requests.get(url)
         if response.status_code == 404:
             return True
-    except ConnectionError:
+    except ex.ConnectionError:
         return False
 
 
@@ -34,10 +37,28 @@ def http_service(docker_ip, docker_services):
 
 @pytest.mark.integration
 def test_get_adventure(http_service):
+    response = requests.get(f"{http_service}/adventure")
 
+    assert response.status_code == 200
+
+
+@pytest.mark.integration
+def test_get_adventure_guid(http_service):
+    response = requests.get(f"{http_service}/adventure/some_id")
+
+    assert response.status_code == 200
+
+
+def test_post_adventure(http_service):
+    body = Adventure()
     headers = {
         "Accept": "application/json",
+        "Content-Type": "application/json",
     }
-    response = requests.get(f"{http_service}/adventure", headers)
+    response = requests.post(
+        f"{http_service}/adventure",
+        headers=headers,
+        data=json.dumps(body, cls=JSONEncoder),
+    )
 
     assert response.status_code == 200

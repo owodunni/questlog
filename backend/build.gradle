@@ -56,6 +56,17 @@ task assembleBackend(){
   dependsOn extractApi, extractModels
 }
 
+task testUnit(type: Exec){
+  dependsOn assembleBackend
+  workingDir projectDir
+
+  commandLine "pytest", "-v", "--pyargs", "$srcDir/test",
+      "--cov-report", "html:$testResultDir/cov/html",
+      "--cov-report", "xml:$testResultDir/cov/coverage.xml",
+      "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
+      "--cov=$srcDir"
+}
+
 task build(type: Exec) {
   dependsOn assembleBackend
   workingDir projectDir
