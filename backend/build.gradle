@@ -64,7 +64,7 @@ task build(type: Exec) {
       "--cov-report", "html:$testResultDir/cov/html",
       "--cov-report", "xml:$testResultDir/cov/coverage.xml",
       "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
-      "--cov=$srcDir"
+      "--cov=$srcDir", "--integration"
 }
 
 task assemble{
