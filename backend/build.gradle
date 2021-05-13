@@ -1,5 +1,15 @@
 plugins {
   id "questlog.java-conventions"
+  id "com.diffplug.spotless"
+}
+
+spotless {
+  ratchetFrom 'origin/main'
+
+  python {
+    target fileTree(dir: projectDir, include: '**/*.py')
+    black("20.8b1")
+  }
 }
 
 version "0.1.0"
@@ -56,30 +66,34 @@ task assembleBackend(){
   dependsOn extractApi, extractModels
 }
 
+def testArgs = [
+  "pytest",
+  "-v",
+  "--pyargs",
+  "$srcDir/test",
+  "--cov-report",
+  "html:$testResultDir/cov/html",
+  "--cov-report",
+  "xml:$testResultDir/cov/coverage.xml",
+  "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
+  "--cov=$srcDir"
+]
+
 task testUnit(type: Exec){
   dependsOn assembleBackend
   workingDir projectDir
 
-  commandLine "pytest", "-v", "--pyargs", "$srcDir/test",
-      "--cov-report", "html:$testResultDir/cov/html",
-      "--cov-report", "xml:$testResultDir/cov/coverage.xml",
-      "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
-      "--cov=$srcDir"
+  commandLine(testArgs)
 }
 
-task build(type: Exec) {
+task test(type: Exec) {
   dependsOn assembleBackend
   workingDir projectDir
 
-  commandLine "pytest", "-v", "--pyargs", "$srcDir/test",
-      "--cov-report", "html:$testResultDir/cov/html",
-      "--cov-report", "xml:$testResultDir/cov/coverage.xml",
-      "--junitxml=$testResultDir/surefire-reports/TEST-report.xml",
-      "--cov=$srcDir", "--integration"
+  def testArgsIntegration = testArgs + "--integration"
+
+  commandLine(testArgsIntegration)
 }
 
-task assemble{
-  group "build"
-  description "Assemble backend"
-  dependsOn assembleBackend
-}
+build.dependsOn test
+assemble.dependsOn assembleBackend

@@ -29,10 +29,6 @@ spotless {
     target fileTree(dir: projectDir, include: '**/*.gradle.kts')
     ktlint()
   }
-  python {
-    target fileTree(dir: projectDir, include: '**/*.py')
-    black("20.8b1")
-  }
 }
 
 spotlessCheck.dependsOn("app:styleCheck")

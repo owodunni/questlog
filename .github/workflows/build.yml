@@ -40,7 +40,7 @@ jobs:
 
       - name: Initialize
         run: ./gradlew --build-cache initialize
-      - name: Assemble
+      - name: Build
         run: ./gradlew --build-cache build
       - name: Publish Test Report
         if: always()
