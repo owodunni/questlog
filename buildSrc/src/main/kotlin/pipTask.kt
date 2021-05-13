@@ -2,7 +2,7 @@ import org.gradle.api.tasks.Exec
 
 open class PipTask : Exec() {
 
-    fun setPipFiles(pipFiles: List<String>) {
+    fun setup(pipFiles: List<String>, pythonPath: String) {
         inputs.files(pipFiles)
 
         var tempArgs = listOf("install")
@@ -11,6 +11,6 @@ open class PipTask : Exec() {
                 reqFile -> tempArgs += listOf("-r", reqFile.toString())
         }
         setArgs(tempArgs)
-        executable = "pip"
+        executable = "$pythonPath/pip"
     }
 }

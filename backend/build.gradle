@@ -8,7 +8,7 @@ spotless {
 
   python {
     target fileTree(dir: projectDir, include: '**/*.py')
-    black("20.8b1")
+    black("20.8b1").pathToExe("${rootProject.ext.pythonDir}/black")
   }
 }
 
@@ -30,10 +30,10 @@ dependencies {
 
 task pip(type: PipTask) {
   workingDir projectDir
-  setPipFiles([
+  setup([
     "requirements.txt",
     "test-requirements.txt"
-  ])
+  ], rootProject.ext.pythonDir)
 }
 
 task initialize(){
@@ -67,7 +67,7 @@ task assembleBackend(){
 }
 
 def testArgs = [
-  "pytest",
+  "${rootProject.ext.pythonDir}/pytest",
   "-v",
   "--pyargs",
   "$srcDir/test",
